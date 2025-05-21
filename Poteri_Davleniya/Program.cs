@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using Poteri_Davleniya.Data;
+
 namespace Poteri_Davleniya
 {
     public class Program
@@ -8,6 +11,8 @@ namespace Poteri_Davleniya
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddDbContext<PoteriContext>(o => o.UseSqlite("Data Source = Poteri.db"));
 
             var app = builder.Build();
 

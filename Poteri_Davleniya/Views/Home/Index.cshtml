@@ -1,8 +1,47 @@
-﻿@{
+﻿@using Poteri_Davleniya.Data
+@model List<Variant>
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<table class="table table-hover">
+    <tr>
+        <th>Длина труб, м</th>
+        <th>Количество труб, шт</th>
+        <th>Количество рядов вдоль хода, шт</th>
+        <th>Количество рядов поперёк хода, шт</th>
+        <th>Продольный шаг, мм</th>
+        <th>Поперечный шаг, мм</th>
+        <th>Диаметр труб, мм</th>
+        <th>Толщина стенок, мм</th>
+        <th>Температура продуктов сгорания, </th>
+        <th>Температура подогрева воздуха, </th>
+        <th>Температура воздуха до подогрева, </th>
+        <th>Расход подогреваемого воздуха, м3/с</th>
+        <th>Площадь поперечного сечения для прохода воздуха, м2</th>
+        <th>Расход продуктов сгорания, м3/с</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.pipe_lenght</td>
+            <td>@item.pipe_quantity</td>
+            <td>@item.rows_along</td>
+            <td>@item.rows_across</td>
+            <td>@item.step_along</td>
+            <td>@item.step_across</td>
+            <td>@item.pipe_diameter</td>
+            <td>@item.pipe_thickness</td>
+            <td>@item.smoke_temp</td>
+            <td>@item.heating_air_temp</td>
+            <td>@item.air_temp</td>
+            <td>@item.heating_air_outgo</td>
+            <td>@item.space_air_pass</td>
+            <td>@item.smoke_outgo</td>
+            <td>
+            </td>
+        </tr>
+
+    }
+
+</table>
