@@ -1,4 +1,84 @@
-﻿@{
+﻿@model HomeCalcViewModel
+@{
     ViewData["Title"] = "Home Page";
 }
 
+<div class="text-start">
+
+    <form action="/home/calc" method="post">
+
+        <div class="mb-3">
+            <label for="pipe_lenght" class="form-label">Длина труб, м</label>
+            <input type="text" name="model.pipe_lenght" class="form-control" id="pipe_lenght" value="@Model.pipe_lenght">
+        </div>
+
+        <div class="mb-3">
+            <label for="pipe_quantity" class="form-label">Количество труб, шт</label>
+            <input type="text" name="model.pipe_quantity" class="form-control" id="pipe_quantity" value="@Model.pipe_quantity">
+        </div>
+
+        <div class="mb-3">
+            <label for="rows_along" class="form-label">Количество рядов вдоль хода, шт</label>
+            <input type="text" name="model.rows_along" class="form-control" id="rows_along" value="@Model.rows_along">
+        </div>
+
+        <div class="mb-3">
+            <label for="rows_across" class="form-label">Количество рядов поперёк хода, шт</label>
+            <input type="text" name="model.rows_across" class="form-control" id="rows_across" value="@Model.rows_across">
+        </div>
+
+        <div class="mb-3">
+            <label for="step_along" class="form-label">Продольный шаг, мм</label>
+            <input type="text" name="model.step_along" class="form-control" id="step_along" value="@Model.step_along">
+        </div>
+
+        <div class="mb-3">
+            <label for="step_across" class="form-label">Поперечный шаг, мм</label>
+            <input type="text" name="model.step_across" class="form-control" id="step_across" value="@Model.step_across">
+        </div>
+
+        <div class="mb-3">
+            <label for="pipe_diameter" class="form-label">Диаметр труб, мм</label>
+            <input type="text" name="model.pipe_diameter" class="form-control" id="pipe_diameter" value="@Model.pipe_diameter">
+        </div>
+
+        <div class="mb-3">
+            <label for="pipe_thickness" class="form-label">Толщина стенок, мм</label>
+            <input type="text" name="model.pipe_thickness" class="form-control" id="pipe_thickness" value="@Model.pipe_thickness">
+        </div>
+
+        <div class="mb-3">
+            <label for="smoke_temp" class="form-label">Температура продуктов сгорания, ℃</label>
+            <input type="text" name="model.smoke_temp" class="form-control" id="smoke_temp" value="@Model.smoke_temp">
+        </div>
+
+        <div class="mb-3">
+            <label for="heating_air_temp" class="form-label">Температура подогрева воздуха, ℃</label>
+            <input type="text" name="model.heating_air_temp" class="form-control" id="heating_air_temp" value="@Model.heating_air_temp">
+        </div>
+
+        <div class="mb-3">
+            <label for="air_temp" class="form-label">Температура воздуха до подогрева, ℃</label>
+            <input type="text" name="model.air_temp" class="form-control" id="air_temp" value="@Model.air_temp">
+        </div>
+
+        <div class="mb-3">
+            <label for="heating_air_outgo" class="form-label">Расход подогреваемого воздуха, м3/с</label>
+            <input type="text" name="model.heating_air_outgo" class="form-control" id="heating_air_outgo" value="@Model.heating_air_outgo">
+        </div>
+
+        <div class="mb-3">
+            <label for="space_air_pass" class="form-label">Площадь поперечного сечения для прохода воздуха, м2</label>
+            <input type="text" name="model.space_air_pass" class="form-control" id="space_air_pass" value="@Model.space_air_pass">
+        </div>
+
+        <div class="mb-3">
+            <label for="smoke_outgo" class="form-label">Расход продуктов сгорания, м3/с</label>
+            <input type="text" name="model.smoke_outgo" class="form-control" id="smoke_outgo" value="@Model.smoke_outgo">
+        </div>
+
+        <button class=" btn btn-primary">Сохранение данных</button>
+
+        <a href="/" class="btn btn-primary">На главную</a>
+    </form>
+</div>
