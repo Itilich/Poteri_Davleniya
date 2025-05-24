@@ -76,114 +76,148 @@
         }
     }
 }
-@if (Context.Request.Method == "POST" && (!inputCs.HasValue || !inputCd.HasValue || !input_delta_h.HasValue))
-{
-    <div class="alert alert-danger">
-        Ошибка: введите корректные числовые значения (используйте точку как разделитель)
-    </div>
-}
-<form action="@Url.Action("Results", "Home", new { id = Model.ID })" method="post">
-    <input type="hidden" name="ID" value="@Model.ID" />
-    <div style="display: flex; min-height: 100vh;">
-        <div style="flex: 1; padding: 20px; max-width: 70%;">
-            <h1 style="text-align: center;">@ViewData["Title"]</h1>
 
-            <div style="
-            display: flex;
-            justify-content: flex-start;
-            gap: 50px;
-            margin: 20px 0;
-            flex-wrap: wrap;
-            ">
+<div style="display: flex; min-height: 100vh;">
+    <div style="flex: 0 0 1000px; padding: 20px; background-color: #f8f9fa;">
+        <div style="margin-bottom: 30px;">
+            <h3 style="color: #333; border-bottom: 1px solid #ddd; padding-bottom: 10px;">Номограммы</h3>
+            <div style="display: flex; flex-direction: column; gap: 30px;">
                 <div>
                     <figure style="margin: 0;">
                         <img src="~/images/Cs.jpg"
-                        alt="Номограмма Cs"
-                        style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);" />
-                        <figcaption style="margin-top: 10px; font-weight: bold;">Поправочный множитель Cs для определения потери давления в шахматном пучке поперечно обтекаемых труб</figcaption>
+                             alt="Номограмма Cs"
+                             style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);" />
+                        <figcaption style="margin-top: 10px; font-weight: bold; text-align: center;">
+                            Поправочный множитель Cs для определения потери давления в шахматном пучке поперечно обтекаемых труб<br>
+                        </figcaption>
                     </figure>
                 </div>
 
                 <div>
                     <figure style="margin: 0;">
                         <img src="~/images/Cd.jpg"
-                        alt="Номограмма Cd"
-                        style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);" />
-                        <figcaption style="margin-top: 10px; font-weight: bold;">Поправочные множители Cd и Δh для определения потери давления в шахматном пучке поперечно обтекаемых труб</figcaption>
+                             alt="Номограмма Cd"
+                             style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);" />
+                        <figcaption style="margin-top: 10px; font-weight: bold; text-align: center;">
+                            Поправочные множители Cd и Δh для определения потери давления в шахматном пучке поперечно обтекаемых труб<br>
+                        </figcaption>
                     </figure>
                 </div>
             </div>
         </div>
     </div>
 
-        <div style="width: 350px; padding: 25px; background-color: #f8f9fa; border-left: 1px solid #dee2e6;">
-            <div style="margin-bottom: 30px;">
+
+    <div style="flex: 1; padding: 20px;">
+        @if (Context.Request.Method == "POST" && (!inputCs.HasValue || !inputCd.HasValue || !input_delta_h.HasValue))
+        {
+            <div class="alert alert-danger">
+                Ошибка: введите корректные числовые значения (используйте точку как разделитель)
+            </div>
+        }
+
+        <form action="@Url.Action("Results", "Home", new { id = Model.ID })" method="post">
+            <input type="hidden" name="ID" value="@Model.ID" />
+
+            <h1 style="text-align: center;">@ViewData["Title"]</h1>
+
+            <div style="margin: 30px 0;">
                 <h3 style="color: #333; border-bottom: 1px solid #ddd; padding-bottom: 10px;">Значения для номограмм</h3>
-                <div style="margin-top: 15px;">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+                    <div>
                         <span style="font-weight: 500;">S1/d:</span>
-                        <span style="font-weight: 600;">@Math.Round(((step_along/1000)/(D/1000)), 2)</span>
+                        <span style="font-weight: 600;">@Math.Round(((step_along / 1000) / (D / 1000)), 2)</span>
                     </div>
-                    <div style="display: flex; justify-content: space-between;">
+                    <div>
                         <span style="font-weight: 500;">S2/d:</span>
-                        <span style="font-weight: 600;">@Math.Round(((step_across / 1000) / (D/1000)), 2)</span>
+                        <span style="font-weight: 600;">@Math.Round(((step_across / 1000) / (D / 1000)), 2)</span>
                     </div>
-                    <div style="display: flex; justify-content: space-between;">
+                    <div>
                         <span style="font-weight: 500;">Скорость, м/с:</span>
                         <span style="font-weight: 600;">@Math.Round(Wd, 2)</span>
                     </div>
-                    <div style="display: flex; justify-content: space-between;">
+                    <div>
                         <span style="font-weight: 500;">Диаметр труб, мм:</span>
                         <span style="font-weight: 600;">@D</span>
                     </div>
                 </div>
             </div>
-            <div>
-                <div>
-                    <h3 style="color: #333; border-bottom: 1px solid #ddd; padding-bottom: 10px;">Ввод параметров</h3>
-                    <div style="margin-top: 20px;">
+
+            <div style="margin: 30px 0;">
+                <h3 style="color: #333; border-bottom: 1px solid #ddd; padding-bottom: 10px;">Ввод параметров</h3>
+                <div style="display: grid; grid-template-columns: 1fr; gap: 20px; margin-top: 20px;">
 
                     <div class="input-group">
                         <label for="inputCs">Cs</label>
-                        <input type="number" id="inputCs" name="inputCs" step="0.01" min="0"
+                        <input type="number" id="inputCs" name="inputCs" step="0.01" min="1.0" max="2.2"
                                lang="en-US" pattern="[0-9]+([\.,][0-9]+)?"
                                value="@(inputCs?.ToString(CultureInfo.InvariantCulture) ?? "")"
-                               class="form-control" />
+                               class="form-control"
+                               required
+                               oninput="validateRange(this, 1.0, 2.2)" />
+                        <div class="invalid-feedback">Значение должно быть между 1.0 и 2.2</div>
                     </div>
 
                     <div class="input-group">
                         <label for="inputCd">Cd</label>
-                        <input type="number" id="inputCd" name="inputCd" step="0.01" min="0"
+                        <input type="number" id="inputCd" name="inputCd" step="0.01" min="0.7" max="1.5"
                                lang="en-US" pattern="[0-9]+([\.,][0-9]+)?"
                                value="@(inputCd?.ToString(CultureInfo.InvariantCulture) ?? "")"
-                               class="form-control" />
+                               class="form-control"
+                               required
+                               oninput="validateRange(this, 0.7, 1.5)" />
+                        <div class="invalid-feedback">Значение должно быть между 0.7 и 1.5</div>
                     </div>
 
                     <div class="input-group">
-                        <label for="input_delta_h">Cs</label>
-                        <input type="number" id="input_delta_h" name="input_delta_h" step="0.01" min="0"
+                        <label for="input_delta_h">Δh</label>
+                        <input type="number" id="input_delta_h" name="input_delta_h" step="0.01" min="0" max="3.0"
                                lang="en-US" pattern="[0-9]+([\.,][0-9]+)?"
                                value="@(input_delta_h?.ToString(CultureInfo.InvariantCulture) ?? "")"
-                               class="form-control" />
+                               class="form-control"
+                               required
+                               oninput="validateRange(this, 0, 3.0)" />
+                        <div class="invalid-feedback">Значение должно быть между 0 и 3.0</div>
                     </div>
 
-                        <button type="submit" class="btn btn-calculate">Рассчитать</button>
+                    <button type="submit" class="btn btn-calculate">Рассчитать</button>
                 </div>
             </div>
-        </div>
+        </form>
+
+        @if (Context.Request.Method == "POST")
+        {
+            <div class="results-container">
+                <h3>Результаты:</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div>
+                        <span>Потери давления на трение:</span>
+                        <strong>@poteri1?.ToString("F2") Па</strong>
+                    </div>
+                    <div>
+                        <span>Потери давления в рекуператоре:</span>
+                        <strong>@poteri2?.ToString("F2") Па</strong>
+                    </div>
+                </div>
+            </div>
+        }
     </div>
-</form>
-@if (Context.Request.Method == "POST")
-{
-    <div class="results-container">
-        <h3>Результаты:</h3>
-        <p>Потери 1: @poteri1?.ToString("F2")</p>
-        <p>Потери 2: @poteri2?.ToString("F2")</p>
-    </div>
-}
+</div>
+
+<script>
+    function validateRange(input, min, max) {
+        const value = parseFloat(input.value);
+        if (isNaN(value) || value < min || value > max) {
+            input.classList.add('is-invalid');
+        } else {
+            input.classList.remove('is-invalid');
+        }
+    }
+</script>
+
 <style>
     .input-group {
-        margin-bottom: 15px;
+        margin-bottom: 20px;
     }
 
     label {
@@ -206,6 +240,8 @@
         border: none;
         border-radius: 4px;
         cursor: pointer;
+        font-size: 16px;
+        margin-top: 10px;
     }
 
     .results-container {
@@ -215,24 +251,27 @@
         border-radius: 5px;
     }
 
-    .result-item {
-        margin: 10px 0;
-        display: flex;
-        justify-content: space-between;
-        max-width: 300px;
-    }
-</style>
-<style>
     .alert-danger {
         color: #721c24;
         background-color: #f8d7da;
         border-color: #f5c6cb;
         padding: 10px;
-        margin-bottom: 15px;
+        margin-bottom: 20px;
         border-radius: 4px;
     }
 
-    .input-error {
-        border-color: #dc3545 !important;
+    .is-invalid {
+        border-color: #dc3545;
+    }
+
+    .invalid-feedback {
+        color: #dc3545;
+        font-size: 0.875em;
+        margin-top: 5px;
+        display: none;
+    }
+
+    .is-invalid ~ .invalid-feedback {
+        display: block;
     }
 </style>
