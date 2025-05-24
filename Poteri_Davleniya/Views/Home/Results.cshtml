@@ -1,0 +1,238 @@
+﻿@model HomeCalcViewModel
+@using System.Globalization
+@{
+    CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
+    CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
+}
+@{
+    double tB = Convert.ToDouble(Model.air_temp + Model.heating_air_temp) / 2;
+    double VB = Convert.ToDouble(Model.heating_air_outgo) * (1 + (tB / 273));
+    double WB = Convert.ToDouble(VB / Model.space_air_pass);
+    double nuB = (8 * Math.Pow(10, -5) * Math.Pow(tB, 2) + 0.0948 * tB + 12.929) * Math.Pow(10, -6);
+    double Re = Convert.ToDouble((WB * (Model.pipe_diameter * 0.001 - 2 * Model.pipe_thickness * 0.001)) / nuB);
+    double roB = Convert.ToDouble((140000 * 0.029) / (8.314 * (273.16 + Model.heating_air_temp)));
+    double lambda;
+    double rows_along = Convert.ToDouble(Model.rows_along);
+    double? poteri1 = null;
+    double? poteri2 = null;
+    double? inputCs = null;
+    double? inputCd = null;
+    double? input_delta_h = null;
+    double step_along = Convert.ToDouble(Model.step_along);
+    double step_across = Convert.ToDouble(Model.step_across);
+    double D = Convert.ToDouble(Model.pipe_diameter);
+    double Td = (Convert.ToDouble(Model.smoke_temp) + Convert.ToDouble(Model.smoke_temp_2)) / 2;
+    double Vd0 = Convert.ToDouble(Model.smoke_outgo);
+    double ww = 1 + Td / 273;
+    double Vd = Vd0 * ww;
+    double Wd = Vd / 7.6;
+
+    if (Re > 10000)
+    {
+        lambda = 0.32 / Math.Pow(Re, 0.25);
+        poteri1 = Convert.ToDouble(lambda * (Model.pipe_lenght / ((Model.pipe_diameter * 0.001 - 2 * Model.pipe_thickness * 0.001))) * (Math.Pow(WB, 2) / 2) * roB);
+    }
+    if (Re < 10000 && Re > 2000)
+    {
+        lambda = 0.3164 / Math.Pow(Re, 0.25);
+        poteri1 = Convert.ToDouble(lambda * (Model.pipe_lenght / ((Model.pipe_diameter * 0.001 - 2 * Model.pipe_thickness * 0.001))) * (Math.Pow(WB, 2) / 2) * roB);
+    }
+    if (Re < 2000)
+    {
+        lambda = 64 / Re;
+        poteri1 = Convert.ToDouble(lambda * (Model.pipe_lenght / ((Model.pipe_diameter * 0.001 - 2 * Model.pipe_thickness * 0.001))) * (Math.Pow(WB, 2) / 2) * roB);
+    }
+    if (Context.Request.Method == "POST")
+    {
+        var culture = System.Globalization.CultureInfo.InvariantCulture;
+
+        if (double.TryParse(Context.Request.Form["inputCs"],
+                           System.Globalization.NumberStyles.Any,
+                           culture,
+                           out double cs))
+        {
+            inputCs = cs;
+        }
+
+        if (double.TryParse(Context.Request.Form["inputCd"],
+                           System.Globalization.NumberStyles.Any,
+                           culture,
+                           out double cd))
+        {
+            inputCd = cd;
+        }
+
+        if (double.TryParse(Context.Request.Form["input_delta_h"],
+                           System.Globalization.NumberStyles.Any,
+                           culture,
+                           out double dh))
+        {
+            input_delta_h = dh;
+        }
+
+        if (inputCs.HasValue && inputCd.HasValue && input_delta_h.HasValue)
+        {
+            poteri2 = 9.81 * inputCs.Value * inputCd.Value * input_delta_h.Value * (rows_along + 1);
+        }
+    }
+}
+@if (Context.Request.Method == "POST" && (!inputCs.HasValue || !inputCd.HasValue || !input_delta_h.HasValue))
+{
+    <div class="alert alert-danger">
+        Ошибка: введите корректные числовые значения (используйте точку как разделитель)
+    </div>
+}
+<form action="@Url.Action("Results", "Home", new { id = Model.ID })" method="post">
+    <input type="hidden" name="ID" value="@Model.ID" />
+    <div style="display: flex; min-height: 100vh;">
+        <div style="flex: 1; padding: 20px; max-width: 70%;">
+            <h1 style="text-align: center;">@ViewData["Title"]</h1>
+
+            <div style="
+            display: flex;
+            justify-content: flex-start;
+            gap: 50px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            ">
+                <div>
+                    <figure style="margin: 0;">
+                        <img src="~/images/Cs.jpg"
+                        alt="Номограмма Cs"
+                        style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);" />
+                        <figcaption style="margin-top: 10px; font-weight: bold;">Поправочный множитель Cs для определения потери давления в шахматном пучке поперечно обтекаемых труб</figcaption>
+                    </figure>
+                </div>
+
+                <div>
+                    <figure style="margin: 0;">
+                        <img src="~/images/Cd.jpg"
+                        alt="Номограмма Cd"
+                        style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);" />
+                        <figcaption style="margin-top: 10px; font-weight: bold;">Поправочные множители Cd и Δh для определения потери давления в шахматном пучке поперечно обтекаемых труб</figcaption>
+                    </figure>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <div style="width: 350px; padding: 25px; background-color: #f8f9fa; border-left: 1px solid #dee2e6;">
+            <div style="margin-bottom: 30px;">
+                <h3 style="color: #333; border-bottom: 1px solid #ddd; padding-bottom: 10px;">Значения для номограмм</h3>
+                <div style="margin-top: 15px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span style="font-weight: 500;">S1/d:</span>
+                        <span style="font-weight: 600;">@Math.Round(((step_along/1000)/(D/1000)), 2)</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="font-weight: 500;">S2/d:</span>
+                        <span style="font-weight: 600;">@Math.Round(((step_across / 1000) / (D/1000)), 2)</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="font-weight: 500;">Скорость, м/с:</span>
+                        <span style="font-weight: 600;">@Math.Round(Wd, 2)</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="font-weight: 500;">Диаметр труб, мм:</span>
+                        <span style="font-weight: 600;">@D</span>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <h3 style="color: #333; border-bottom: 1px solid #ddd; padding-bottom: 10px;">Ввод параметров</h3>
+                    <div style="margin-top: 20px;">
+
+                    <div class="input-group">
+                        <label for="inputCs">Cs</label>
+                        <input type="number" id="inputCs" name="inputCs" step="0.01" min="0"
+                               lang="en-US" pattern="[0-9]+([\.,][0-9]+)?"
+                               value="@(inputCs?.ToString(CultureInfo.InvariantCulture) ?? "")"
+                               class="form-control" />
+                    </div>
+
+                    <div class="input-group">
+                        <label for="inputCd">Cd</label>
+                        <input type="number" id="inputCd" name="inputCd" step="0.01" min="0"
+                               lang="en-US" pattern="[0-9]+([\.,][0-9]+)?"
+                               value="@(inputCd?.ToString(CultureInfo.InvariantCulture) ?? "")"
+                               class="form-control" />
+                    </div>
+
+                    <div class="input-group">
+                        <label for="input_delta_h">Cs</label>
+                        <input type="number" id="input_delta_h" name="input_delta_h" step="0.01" min="0"
+                               lang="en-US" pattern="[0-9]+([\.,][0-9]+)?"
+                               value="@(input_delta_h?.ToString(CultureInfo.InvariantCulture) ?? "")"
+                               class="form-control" />
+                    </div>
+
+                        <button type="submit" class="btn btn-calculate">Рассчитать</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+@if (Context.Request.Method == "POST")
+{
+    <div class="results-container">
+        <h3>Результаты:</h3>
+        <p>Потери 1: @poteri1?.ToString("F2")</p>
+        <p>Потери 2: @poteri2?.ToString("F2")</p>
+    </div>
+}
+<style>
+    .input-group {
+        margin-bottom: 15px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 500;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    .btn-calculate {
+        background-color: #28a745;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .results-container {
+        margin-top: 30px;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 5px;
+    }
+
+    .result-item {
+        margin: 10px 0;
+        display: flex;
+        justify-content: space-between;
+        max-width: 300px;
+    }
+</style>
+<style>
+    .alert-danger {
+        color: #721c24;
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+        padding: 10px;
+        margin-bottom: 15px;
+        border-radius: 4px;
+    }
+
+    .input-error {
+        border-color: #dc3545 !important;
+    }
+</style>

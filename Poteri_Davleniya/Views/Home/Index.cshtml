@@ -4,47 +4,65 @@
     ViewData["Title"] = "Home Page";
 }
 
-<a href="/home/calc/" class="btn btn-primary">Добавить новый расчет</a>
-
-<table class="table table-hover">
-    <tr>
-        <th>Длина труб, м</th>
-        <th>Количество труб, шт</th>
-        <th>Количество рядов вдоль хода, шт</th>
-        <th>Количество рядов поперёк хода, шт</th>
-        <th>Продольный шаг, мм</th>
-        <th>Поперечный шаг, мм</th>
-        <th>Диаметр труб, мм</th>
-        <th>Толщина стенок, мм</th>
-        <th>Температура продуктов сгорания, ℃</th>
-        <th>Температура подогрева воздуха, ℃</th>
-        <th>Температура воздуха до подогрева, ℃</th>
-        <th>Расход подогреваемого воздуха, м3/с</th>
-        <th>Площадь поперечного сечения для прохода воздуха, м2</th>
-        <th>Расход продуктов сгорания, м3/с</th>
-    </tr>
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>@item.pipe_lenght</td>
-            <td>@item.pipe_quantity</td>
-            <td>@item.rows_along</td>
-            <td>@item.rows_across</td>
-            <td>@item.step_along</td>
-            <td>@item.step_across</td>
-            <td>@item.pipe_diameter</td>
-            <td>@item.pipe_thickness</td>
-            <td>@item.smoke_temp</td>
-            <td>@item.heating_air_temp</td>
-            <td>@item.air_temp</td>
-            <td>@item.heating_air_outgo</td>
-            <td>@item.space_air_pass</td>
-            <td>@item.smoke_outgo</td>
-            <td>
-                <a href="/home/delete/@item.ID">Удалить</a>
-            </td>
-        </tr>
-
+<style>
+    body {
+        padding-left: 0 !important;
+        margin-left: 0 !important;
     }
 
-</table>
+    .container {
+        padding-left: 0 !important;
+        margin-left: 10px !important;
+        max-width: 100% !important;
+    }
+</style>
+
+<div style="text-align: left; margin-bottom: 5px; padding-left: 0">
+    <a href="/home/calc/" class="btn btn-primary">Добавить новый расчет</a>
+</div>
+
+<div style="text-align: left; padding-left: 0; margin-left: 0">
+    <table class="table table-hover" style="margin-left: 0; padding-left: 0">
+        <tr>
+            <th>Длина труб, м</th>
+            <th>Количество труб, шт</th>
+            <th>Количество рядов вдоль хода, шт</th>
+            <th>Количество рядов поперёк хода, шт</th>
+            <th>Продольный шаг, мм</th>
+            <th>Поперечный шаг, мм</th>
+            <th>Диаметр труб, мм</th>
+            <th>Толщина стенок, мм</th>
+            <th>Температура продуктов сгорания после рекуператора, ℃</th>
+            <th>Температура продуктов сгорания до рекуператора, ℃</th>
+            <th>Температура подогрева воздуха, ℃</th>
+            <th>Температура воздуха до подогрева, ℃</th>
+            <th>Расход подогреваемого воздуха, м3/с</th>
+            <th>Площадь поперечного сечения для прохода воздуха, м2</th>
+            <th>Расход продуктов сгорания, м3/с</th>
+            <th>Действия</th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.pipe_lenght</td>
+                <td>@item.pipe_quantity</td>
+                <td>@item.rows_along</td>
+                <td>@item.rows_across</td>
+                <td>@item.step_along</td>
+                <td>@item.step_across</td>
+                <td>@item.pipe_diameter</td>
+                <td>@item.pipe_thickness</td>
+                <td>@item.smoke_temp</td>
+                <td>@item.smoke_temp_2</td>
+                <td>@item.heating_air_temp</td>
+                <td>@item.air_temp</td>
+                <td>@item.heating_air_outgo</td>
+                <td>@item.space_air_pass</td>
+                <td>@item.smoke_outgo</td>
+                <td>
+                    <a href="/home/results/@item.ID">Открыть</a> <a href="/home/delete/@item.ID">Удалить</a>
+                </td>
+            </tr>
+        }
+    </table>
+</div>

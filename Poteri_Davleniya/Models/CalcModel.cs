@@ -11,6 +11,7 @@
         public double pipe_diameter { get; set; }
         public double pipe_thickness { get; set; }
         public double smoke_temp { get; set; }
+        public double smoke_temp_2 { get; set; }
         public double heating_air_temp { get; set; }
         public double air_temp { get; set; }
         public double heating_air_outgo { get; set; }

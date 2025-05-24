@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Poteri_Davleniya.Models;
 using Poteri_Davleniya.Data;
+using Poteri_Davleniya.Migrations;
 
 namespace Poteri_Davleniya.Controllers
 {
@@ -51,6 +52,7 @@ namespace Poteri_Davleniya.Controllers
                 viewModel.pipe_diameter = variant.pipe_diameter;
                 viewModel.pipe_thickness = variant.pipe_thickness;
                 viewModel.smoke_temp = variant.smoke_temp;
+                viewModel.smoke_temp_2 = variant.smoke_temp_2;
                 viewModel.heating_air_temp = variant.heating_air_temp;
                 viewModel.air_temp = variant.air_temp;
                 viewModel.heating_air_outgo = variant.heating_air_outgo;
@@ -80,6 +82,7 @@ namespace Poteri_Davleniya.Controllers
                 pipe_diameter = model.pipe_diameter,
                 pipe_thickness = model.pipe_thickness,
                 smoke_temp = model.smoke_temp,
+                smoke_temp_2 = model.smoke_temp_2,
                 heating_air_temp = model.heating_air_temp,
                 air_temp = model.air_temp,
                 heating_air_outgo = model.heating_air_outgo,
@@ -91,7 +94,57 @@ namespace Poteri_Davleniya.Controllers
             return View(viewModel);
         }
 
+        [HttpGet]
+        public IActionResult Results(int id)
+        {
 
+            var variant = _context.Variants.FirstOrDefault(x => x.ID == id);
+            if (variant == null) return NotFound();
+
+            return View(new HomeCalcViewModel
+            {
+                ID = id,
+                pipe_lenght = variant.pipe_lenght,
+                pipe_quantity = variant.pipe_quantity,
+                rows_along = variant.rows_along,
+                rows_across = variant.rows_across,
+                step_along = variant.step_along,
+                step_across = variant.step_across,
+                pipe_diameter = variant.pipe_diameter,
+                pipe_thickness = variant.pipe_thickness,
+                smoke_temp = variant.smoke_temp,
+                smoke_temp_2 = variant.smoke_temp_2,
+                heating_air_temp = variant.heating_air_temp,
+                air_temp = variant.air_temp,
+                heating_air_outgo = variant.heating_air_outgo,
+                space_air_pass = variant.space_air_pass,
+                smoke_outgo = variant.smoke_outgo
+            });
+        }
+
+        [HttpPost]
+        public IActionResult Results(int id, HomeCalcViewModel model)
+        {
+            var variant = _context.Variants.FirstOrDefault(x => x.ID == id);
+            model.ID = id;
+            model.pipe_lenght = variant.pipe_lenght;
+            model.pipe_quantity = variant.pipe_quantity;
+            model.rows_along = variant.rows_along;
+            model.rows_across = variant.rows_across;
+            model.step_along = variant.step_along;
+            model.step_across = variant.step_across;
+            model.pipe_diameter = variant.pipe_diameter;
+            model.pipe_thickness = variant.pipe_thickness;
+            model.smoke_temp = variant.smoke_temp;
+            model.smoke_temp_2 = variant.smoke_temp_2;
+            model.heating_air_temp = variant.heating_air_temp;
+            model.air_temp = variant.air_temp;
+            model.heating_air_outgo = variant.heating_air_outgo;
+            model.space_air_pass = variant.space_air_pass;
+            model.smoke_outgo = variant.smoke_outgo;
+            return View(model);
+        }
+       
         public IActionResult Privacy()
         {
             return View();

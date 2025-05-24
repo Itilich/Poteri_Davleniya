@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Poteri_Davleniya.Data;
 
@@ -10,9 +11,11 @@ using Poteri_Davleniya.Data;
 namespace Poteri_Davleniya.Migrations
 {
     [DbContext(typeof(PoteriContext))]
-    partial class PoteriContextModelSnapshot : ModelSnapshot
+    [Migration("20250523135101_nullable")]
+    partial class nullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.11");
@@ -23,7 +26,16 @@ namespace Poteri_Davleniya.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<double?>("Cd")
+                        .HasColumnType("REAL");
+
+                    b.Property<double?>("Cs")
+                        .HasColumnType("REAL");
+
                     b.Property<double?>("air_temp")
+                        .HasColumnType("REAL");
+
+                    b.Property<double?>("delta_h")
                         .HasColumnType("REAL");
 
                     b.Property<double?>("heating_air_outgo")
@@ -42,6 +54,9 @@ namespace Poteri_Davleniya.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<double?>("pipe_thickness")
+                        .HasColumnType("REAL");
+
+                    b.Property<double?>("poteri1")
                         .HasColumnType("REAL");
 
                     b.Property<int?>("rows_across")
